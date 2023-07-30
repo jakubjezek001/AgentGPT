@@ -134,7 +134,7 @@ def replace_templates(block: Block, outputs: Dict[str, Any]) -> Block:
 
             matched_key = get_template(block_id, block_key)
 
-            if matched_key in outputs.keys():
+            if matched_key in outputs:
                 value = value.replace(full_match, str(outputs[matched_key]))
             else:
                 raise RuntimeError(f"Unable to replace template: {full_match}")

@@ -174,14 +174,11 @@ class OpenAIAgentService(AgentService):
         unique_tasks = []
         with self.agent_memory as memory:
             for task in tasks:
-                similar_tasks = memory.get_similar_tasks(task)
-
-                # Check if similar tasks are found
-                if not similar_tasks:
-                    unique_tasks.append(task)
-                else:
+                if similar_tasks := memory.get_similar_tasks(task):
                     logger.info(f"Similar tasks to '{task}' found: {similar_tasks}")
 
+                else:
+                    unique_tasks.append(task)
             if unique_tasks:
                 memory.add_tasks(unique_tasks)
 
@@ -198,7 +195,7 @@ class OpenAIAgentService(AgentService):
 
         snippet_max_tokens = 7000  # Leave room for the rest of the prompt
         text_tokens = self.token_service.tokenize("".join(results))
-        text = self.token_service.detokenize(text_tokens[0:snippet_max_tokens])
+        text = self.token_service.detokenize(text_tokens[:snippet_max_tokens])
         logger.info(f"Summarizing text: {text}")
 
         return summarize(

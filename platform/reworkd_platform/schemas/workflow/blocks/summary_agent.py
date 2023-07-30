@@ -78,9 +78,7 @@ class SummaryAgent(Block):
             presence_penalty=0,
         )
 
-        response_message_content = response["choices"][0]["message"]["content"]
-
-        return response_message_content
+        return response["choices"][0]["message"]["content"]
 
     def read_and_preprocess_tables(
         self, relevant_table_metadata: dict[str, list[int]]
@@ -88,8 +86,7 @@ class SummaryAgent(Block):
         processed = []
         parsed_dfs_from_file: list[Any] | dict[str, Any] = []
 
-        for source in relevant_table_metadata.keys():
-            page_numbers = relevant_table_metadata[source]
+        for source, page_numbers in relevant_table_metadata.items():
             filtered_page_numbers = list(filter(lambda x: x != 0, page_numbers))
             if len(filtered_page_numbers) > 1:
                 filtered_page_numbers.sort()
@@ -136,13 +133,7 @@ class SummaryAgent(Block):
             texts.extend(text_splitter.split_documents(pdf_data))
             # texts.extend(text_splitter.create_documents(table_data))
 
-        docsearch = Pinecone.from_documents(
-            [t for t in texts],
-            embeddings,
-            index_name=index_name,
-        )
-
-        return docsearch
+        return Pinecone.from_documents(list(texts), embeddings, index_name=index_name)
 
     async def execute_query_on_pinecone(
         self, company_context: str, docsearch: Pinecone

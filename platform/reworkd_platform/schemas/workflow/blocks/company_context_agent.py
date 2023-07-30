@@ -53,6 +53,4 @@ async def execute_prompt(company: str) -> str:
         presence_penalty=0,
     )
 
-    response_message_content = response["choices"][0]["message"]["content"]
-
-    return response_message_content
+    return response["choices"][0]["message"]["content"]
