@@ -106,9 +106,10 @@ def get_page_content(url: str) -> str:
     for line_num in line_nums.split(","):
         if "-" in line_num:
             start, end = map(int, line_num.split("-"))
-            for i in range(start, end + 1):
-                text = ".".join(pgraphs[i - 1].split(".")[1:]).strip()
-                content.append(text)
+            content.extend(
+                ".".join(pgraphs[i - 1].split(".")[1:]).strip()
+                for i in range(start, end + 1)
+            )
         else:
             text = ".".join(pgraphs[int(line_num) - 1].split(".")[1:]).strip()
             content.append(text)
@@ -125,14 +126,13 @@ def find_content_kws(content: str) -> str:
         max_tokens_to_sample=20,
         temperature=0,
     )
-    response_message = response.completion.strip()
-    return response_message
+    return response.completion.strip()
 
 
 def search_results(search_query: str) -> list[str]:
     # use SERP API
     response = requests.post(
-        f"https://google.serper.dev/search",
+        "https://google.serper.dev/search",
         headers={
             "X-API-KEY": settings.serp_api_key or "",
             "Content-Type": "application/json",
@@ -143,8 +143,7 @@ def search_results(search_query: str) -> list[str]:
     )
     response.raise_for_status()
     search_results = response.json()
-    urls = [result["link"] for result in search_results["organic"]]
-    return urls
+    return [result["link"] for result in search_results["organic"]]
 
 
 def find_new_info(target: str, source: str) -> str:
@@ -157,8 +156,7 @@ def find_new_info(target: str, source: str) -> str:
         temperature=0,
     )
     response_message = response.completion.strip()
-    new_info = "\n".join(response_message.split("\n\n"))
-    return new_info
+    return "\n".join(response_message.split("\n\n"))
 
 
 def add_info(target: str, info: str) -> str:
@@ -170,5 +168,4 @@ def add_info(target: str, info: str) -> str:
         max_tokens_to_sample=5000,
         temperature=0,
     )
-    response_message = response.completion.strip()
-    return response_message
+    return response.completion.strip()

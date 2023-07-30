@@ -71,13 +71,13 @@ def get_diff_doc(diff_list: List[List[str]], in_memory_file: io.BytesIO) -> io.B
 
         for word in diff:
             if word.startswith("  "):
-                run = paragraph.add_run(word[2:] + " ")
+                run = paragraph.add_run(f"{word[2:]} ")
                 run.font.color.rgb = RGBColor(0x00, 0x00, 0x00)  # Black color
             elif word.startswith("- "):
-                run = paragraph.add_run(word[2:] + " ")
+                run = paragraph.add_run(f"{word[2:]} ")
                 run.font.color.rgb = RGBColor(0xFF, 0x00, 0x00)  # Red color
             elif word.startswith("+ "):
-                run = paragraph.add_run(word[2:] + " ")
+                run = paragraph.add_run(f"{word[2:]} ")
                 run.font.color.rgb = RGBColor(0x00, 0x80, 0x00)  # Green color
             else:
                 continue

@@ -33,8 +33,7 @@ def test_get_template() -> None:
     ],
 )
 def test_template_pattern(test_input: str, expected_output: dict) -> None:
-    match = re.match(TEMPLATE_PATTERN, test_input)
-    if match:
+    if match := re.match(TEMPLATE_PATTERN, test_input):
         assert match.groupdict() == expected_output
     else:
         assert match is expected_output  # should be None for failed matches

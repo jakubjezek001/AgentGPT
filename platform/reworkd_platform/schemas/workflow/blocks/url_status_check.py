@@ -31,5 +31,4 @@ class UrlStatusCheckBlock(Block):
             logger.info(f"UrlStatusCheckBlock errored: {RequestException}")
 
         logger.info(f"UrlStatusCheckBlock Code: {code}")
-        output = UrlStatusCheckBlockOutput(code=code, **self.input.dict())
-        return output
+        return UrlStatusCheckBlockOutput(code=code, **self.input.dict())

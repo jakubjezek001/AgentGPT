@@ -96,9 +96,9 @@ async def slack_channels(
 
     token = encryption_service.decrypt(creds.access_token_enc)
     client = WebClient(token=token)
-    channels = [
+    return [
         Channel(name=c["name"], id=c["id"])
-        for c in client.conversations_list(types=["public_channel"])["channels"]
+        for c in client.conversations_list(types=["public_channel"])[
+            "channels"
+        ]
     ]
-
-    return channels
